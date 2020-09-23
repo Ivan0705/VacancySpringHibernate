@@ -23,7 +23,6 @@ public class VacancyDtoToVacancyConverter extends AbstractConverter<VacancyDto, 
     @Override
     public Vacancy convert(VacancyDto source) {
         Vacancy vacancy = new Vacancy();
-
         vacancy.setId(source.getId());
         vacancy.setEmployer(employerDtoConverter.convert(source.getEmployer()));
         vacancy.setName(source.getName());

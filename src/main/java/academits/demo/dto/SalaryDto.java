@@ -9,25 +9,6 @@ public class SalaryDto {
     public SalaryDto() {
     }
 
-    public SalaryDto(Integer to, Integer from, String currency, boolean gross) {
-        this.to = to;
-        this.from = from;
-        this.currency = currency;
-        this.gross = gross;
-    }
-
-    public SalaryDto(Integer to, int from, String currency, boolean gross) {
-        this.currency = currency;
-        this.gross = gross;
-    }
-
-    public SalaryDto(int to, int from, String currency, boolean gross) {
-        this.to = to;
-        this.from = from;
-        this.currency = currency;
-        this.gross = gross;
-    }
-
     public int getTo() {
         return to;
     }
@@ -60,8 +41,4 @@ public class SalaryDto {
         this.gross = gross;
     }
 
-    @Override
-    public String toString() {
-        return "\"from\":\"" + this.from + "\", \"to\":\"" + this.to + "\", \"currency\":\"" + this.currency + "\", \"gross\":\"" + this.gross + "\"";
-    }
 }

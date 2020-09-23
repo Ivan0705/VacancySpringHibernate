@@ -23,7 +23,7 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
     @Transactional
     @Override
-    public List<T> findAll() {
+    public List<T> findAll(int page, int sizePage) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(clazz);
         Root<T> root = cq.from(clazz);
@@ -32,7 +32,22 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         CriteriaQuery<T> select = cq.select(root);
         TypedQuery<T> q = entityManager.createQuery(select);
 
+        q.setFirstResult((page) * sizePage);
+        q.setMaxResults(sizePage);
+
         return q.getResultList();
+    }
+
+    @Override
+    public long countAll() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<T> root = cq.from(clazz);
+
+        CriteriaQuery<Long> select = cq.select(cb.count(root));
+        TypedQuery<Long> q = entityManager.createQuery(select);
+
+        return q.getSingleResult();
     }
 
     @Override

@@ -6,6 +6,4 @@ public interface Converter<S, D> {
     D convert(S sourse);
 
     List<D> convert(List<S> source);
-
-
 }

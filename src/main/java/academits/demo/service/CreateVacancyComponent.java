@@ -25,7 +25,7 @@ public class CreateVacancyComponent {
     @Value("${specialization}")
     private Integer specialization;
 
-    @Value("${area}")
+    @Value("4")
     private Integer area;
 
     @Autowired
@@ -41,7 +41,7 @@ public class CreateVacancyComponent {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
             HttpGet request = new HttpGet(
-                    String.format("https://api.hh.ru/vacancies?specialization=%s&area=%s&per_page=50",
+                    String.format("https://api.hh.ru/vacancies?specialization=%s&area=%s&per_page=85",
                             specialization, area
                             ));
 

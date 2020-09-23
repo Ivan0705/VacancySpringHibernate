@@ -1,40 +1,33 @@
 <!DOCTYPE html>
 <html lang=xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
 >
-
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/phonebook.css"/>
+    <link rel="stylesheet" type="text/css" href="css/vacancy.css"/>
     <title>Vacancy</title>
 </head>
 <body>
 
 <div id="app" class="content">
-
     <div class="filter-container">
         <label class="mr-1">
-            Введите текст:
-            <input type="text" class="form-control input-sm" v-model="filterQuery"/>
+            <input type="text" class="form-control input-sm" v-model="filterQuery" placeholder="Найти:"/>
         </label>
         <button class="btn btn-primary" v-on:click="applyFilter">Отфильтровать</button>
         <button class="btn btn-primary" @click="resetFilter">Сбросить фильтр</button>
-        <button class="btn btn-light" @click="getTopSalary">Топ - зарплата</button>
+        <button class="btn btn-primary" @click="getTopSalary">Топ - зарплата</button>
 
         <label>
-            <label>
-                <select class="form-control" v-model="filterRegion" @change="applyFilter">
-                    <option :value="null">-----</option>
-                    <option class="btn-light" v-for="city in cityName" :value="city.id">
-                        {{city.name}}
-                    </option>
-                </select>
-            </label>
+            <select class="form-control" v-model="filterRegion" @change="applyFilter" size="1">
+                <option :value="null">Выберите регион</option>
+                <option v-for="city in cityName" :value="city.id">
+                    г.{{city.name}}
+                </option>
+            </select>
         </label>
-
     </div>
 
     <table class="table table-bordered contact-table">
@@ -51,18 +44,16 @@
         <tbody>
         <tr v-cloak v-for="row in rows">
             <template v-if="row.shown">
-                <td v-text="row.number"></td>
-                <td v-text="row.name"></td>
+                <td>{{row.number}}</td>
+                <td>{{row.name}}</td>
                 <td>
-                    <span v-if="row.area!==null">
-                        г.{{row.area.name}}
+                    <span v-if="row.area!==null">г.{{row.area.name}}
                     </span>
                     <span v-else>
-                        Неизвестно
                     </span>
                 </td>
-                <td>{{row.published_at}}=={{getDate}}</td>
-                <td v-text="row.employer.name"></td>
+                <td>{{formatDate(row.published_at)}}</td>
+                <td>{{row.employer.name}}</td>
                 <td>
                     <span v-if="row.salary">
                         <span v-if="row.salary.from===0">До {{row.salary.to}} руб.</span>
@@ -75,11 +66,16 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-primary" v-for="page in pages" @click="applyFilter" v-model="currentPage">
-     {{page}}
-    </button>
-
+    <div class="pagination-lg">
+        <p class="fixed">Страница: {{currentPage+1}}</p>
+        <button class="btn btn-primary" @click="prevPage"><=</button>
+        <button class="btn btn-primary" v-for="page in pages" @click="setPage(page-1)">
+            {{page}}
+        </button>
+        <button class="btn btn-primary" @click="nextPage()">=></button>
+    </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 <script src="js/libs/jquery.js"></script>
 <script src="js/libs/bootstrap.bundle.js"></script>
 <script src="js/libs/vue.js"></script>

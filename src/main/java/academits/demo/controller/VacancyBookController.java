@@ -8,7 +8,6 @@ import academits.demo.service.VacancyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
@@ -26,18 +25,10 @@ public class VacancyBookController {
         this.vacancyToVacancyDtoConverter = vacancyToVacancyDtoConverter;
     }
 
-    /*
-        @RequestMapping(value = "getAllVacancies", method = RequestMethod.GET)
-        @ResponseBody
-        public List<VacancyDto> getAllVacancies(String filter, String filterRegion) throws ParseException {
-            return vacancyToVacancyDtoConverter.convert(vacancyService.getAllVacancies(filter, filterRegion));
-
-        }*/
     @RequestMapping(value = "getAllVacancies", params = "page", method = RequestMethod.GET)
     @ResponseBody
-    public PageResult<VacancyDto> getAllVacancies(String filter, String filterRegion, @RequestParam("page") int page, int sizePage) throws ParseException {
-        //  PageResult<VacancyDto> pageResult = vacancyService.getAllVacancies(filter, filterRegion, page, sizePage);
-        return vacancyService.getAllVacancies(filter, filterRegion, page, sizePage);// pageResult.setEntries(vacancyToVacancyDtoConverter.convert(vacancyService.getAllVacancies(filter, filterRegion)));
+    public PageResult<VacancyDto> getAllVacancies(String filter, String filterRegion, int page, int sizePage) throws ParseException {
+            return vacancyService.getAllVacancies(filter, filterRegion, page, sizePage);
     }
 
     @RequestMapping(value = "getTopSalary", method = RequestMethod.GET)

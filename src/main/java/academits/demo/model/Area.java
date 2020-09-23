@@ -6,9 +6,11 @@ import javax.persistence.Id;
 @Entity
 public class Area {
     @Id
+    private
     Long id;
 
     private String name;
+
     private String url;
 
     public Area() {

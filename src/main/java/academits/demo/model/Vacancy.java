@@ -21,15 +21,12 @@ public class Vacancy {
     @JoinColumn(name = "employerId")
 
     private Employer employer;
-    //    @ManyToOne(cascade = CascadeType.ALL)
-    //  @JoinColumn(name = "areaId")
+
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     private Area area;
 
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     private Salary salary;
-
-
 
     public Long getId() {
         return id;

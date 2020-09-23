@@ -42,9 +42,4 @@ public class Employer {
     public void setUrl(String url) {
         this.url = url;
     }
-
-    @Override
-    public String toString() {
-        return "\"id\":\"" + this.id + "\", \"name\":\"" + this.name + "\", \"url\":\"" + this.url + "\"";
-    }
 }

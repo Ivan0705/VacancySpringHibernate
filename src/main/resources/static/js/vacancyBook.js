@@ -19,60 +19,29 @@ new Vue({
         filterQuery: "",
         filterRegion: "",
         filterActive: false,
-        currentPage: 0
-
-    }, prop: {
-        listData: {
-            type: Array,
-            required: true
-        },
-        size: {
-            type: Number,
-            required: false,
-            default: 10
-        }
+        pageActive: false,
+        currentPage: 0,
+        pages: 0,
+        sizePage: 10
     },
     computed: {
         cityName: function () {
-            var cities = {};
+            const cities = {};
             this.rows.forEach(function (row) {
                 if (row.area) {
                     cities[row.area.id] = row.area;
                 }
             });
             return Object.values(cities);
-        },
-        getDate: function () {
-            var year;
-            var month;
-            var day;
-            var date;
-            /*  var self = this;
-
-            /* if (self.rows.published_at) {
-                   year = self.rows.published_at.slice(0, 4);
-                   month = self.rows.published_at.slice(5, 7);
-                   day = self.rows.published_at.slice(8, 10);
-                   date = day + "." + month + "." + year;
-               }*/
-            this.rows.forEach(function (row) {
-                if (row.published_at) {
-                    year = row.published_at.slice(0, 4);
-                    month = row.published_at.slice(5, 7);
-                    day = row.published_at.slice(8, 10);
-                    date = day + "." + month + "." + year;
-                }
-            });
-            return date;
         }
-
-
     },
-
     methods: {
+        formatDate: function (date) {
+            return moment(date).format('DD.MM.YYYY');
+        },
         applyFilter: function () {
             this.filterActive = true;
-
+            this.currentPage = 0;
             this.loadData();
         },
         resetFilter: function () {
@@ -93,7 +62,6 @@ new Vue({
         convertVacancyList: function (vacancyListFromServer) {
             return vacancyListFromServer.map(function (vacancy, i) {
                 return {
-
                     id: vacancy.id,
                     name: vacancy.name,
                     published_at: vacancy.published_at,
@@ -106,8 +74,12 @@ new Vue({
                 };
             });
         },
+        setPage: function (page) {
+            this.currentPage = page;
+            this.loadData();
+        },
         getTopSalary: function () {
-            var self = this;
+            const self = this;
 
             $.ajax({
                 type: "GET",
@@ -117,26 +89,35 @@ new Vue({
             });
         },
         loadData: function () {
-            var self = this;
+            const self = this;
+            let filterQuery = "";
+            let filterRegion = "";
 
-            var filterQuery = "";
-            var filterRegion = "";
             if (this.filterActive) {
                 filterQuery = this.filterQuery;
                 filterRegion = this.filterRegion
             }
 
-            $.get("/vacancyBook/rpc/api/v1/getAllVacancies?filter=" + filterQuery + "&filterRegion=" + filterRegion)
-                .done(function (vacancyListFormServer) {
-                    self.rows = self.convertVacancyList(vacancyListFormServer);
-                });
+            $.get("/vacancyBook/rpc/api/v1/getAllVacancies?filter=" + filterQuery
+                + "&filterRegion=" + filterRegion
+                + "&page=" + this.currentPage
+                + "&sizePage=" + this.sizePage
+            ).done(function (vacancyListFormServer) {
+                self.rows = self.convertVacancyList(vacancyListFormServer.entries);
+                self.pages = vacancyListFormServer.pages;
+            });
         },
         prevPage: function () {
-            this.currentPage--;
-            g
+            if (this.currentPage >= 1) {
+                this.currentPage--;
+                this.loadData();
+            }
         },
         nextPage: function () {
-            this.currentPage++;
+            if (this.currentPage < this.pages - 1) {
+                this.currentPage++;
+                this.loadData();
+            }
         }
     },
     created: function () {

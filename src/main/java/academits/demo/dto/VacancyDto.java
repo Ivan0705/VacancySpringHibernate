@@ -18,6 +18,7 @@ public class VacancyDto {
 
     @JsonProperty
     private AreaDto area;
+
     @JsonProperty("salary")
     private SalaryDto salary;
 

@@ -10,10 +10,10 @@ public class AreaToAreaDtoConverter extends AbstractConverter<Area, AreaDto> {
     public AreaDto convert(Area sourse) {
         if (sourse != null) {
             AreaDto areaDto = new AreaDto();
-
             areaDto.setId(sourse.getId());
             areaDto.setName(sourse.getName());
             areaDto.setUrl(sourse.getUrl());
+
             return areaDto;
         }
         return null;

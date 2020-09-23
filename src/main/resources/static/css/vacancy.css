@@ -88,3 +88,7 @@ input[type=number] {
 [v-cloak] {
     display: none;
 }
+
+.pagination {
+    margin: 4px;
+}

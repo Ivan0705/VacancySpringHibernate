@@ -72,9 +72,4 @@ public class Salary {
     public void setVacancy(Vacancy vacancy) {
         this.vacancy = vacancy;
     }
-
-    @Override
-    public String toString() {
-        return "\"from\":\"" + this.from + "\", \"to\":\"" + this.to + "\", \"currency\":\"" + this.currency + "\", \"gross\":\"" + this.gross + "\"";
-    }
 }

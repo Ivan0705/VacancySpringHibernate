@@ -10,7 +10,6 @@ public class EmployerDtoToEmployerConverter extends AbstractConverter<EmployerDt
     @Override
     public Employer convert(EmployerDto source) {
         Employer employer = new Employer();
-
         employer.setId(source.getId());
         employer.setName(source.getName());
         employer.setUrl(source.getUrl());

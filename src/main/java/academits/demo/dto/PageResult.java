@@ -3,11 +3,14 @@ package academits.demo.dto;
 import java.util.List;
 
 public class PageResult<T> {
-    private List<T> entries;//список записей
-    private int total;//общее кол-во
-    private int pages;//страницы
+    private List<T> entries;
+    private long total;
+    private int pages;
 
-    public PageResult() {
+    public PageResult(List<T> entries, long total, int pages) {
+        this.entries = entries;
+        this.total = total;
+        this.pages = pages;
     }
 
     public List<T> getEntries() {
@@ -18,7 +21,7 @@ public class PageResult<T> {
         this.entries = entries;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 
