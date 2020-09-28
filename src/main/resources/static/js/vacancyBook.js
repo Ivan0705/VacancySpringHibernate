@@ -22,17 +22,22 @@ new Vue({
         pageActive: false,
         currentPage: 0,
         pages: 0,
-        sizePage: 10
+        sizePage: 35,
+        areas: [],
     },
     computed: {
-        cityName: function () {
-            const cities = {};
-            this.rows.forEach(function (row) {
-                if (row.area) {
-                    cities[row.area.id] = row.area;
+        sortedCitiesName: function () {
+            function compare(a, b) {
+                if (a.name < b.name) {
+                    return -1;
                 }
-            });
-            return Object.values(cities);
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            }
+
+            return this.areas.sort(compare);
         }
     },
     methods: {
@@ -70,7 +75,6 @@ new Vue({
                     salary: vacancy.salary,
                     shown: true,
                     number: i + 1
-
                 };
             });
         },
@@ -98,10 +102,13 @@ new Vue({
                 filterRegion = this.filterRegion
             }
 
-            $.get("/vacancyBook/rpc/api/v1/getAllVacancies?filter=" + filterQuery
-                + "&filterRegion=" + filterRegion
-                + "&page=" + this.currentPage
-                + "&sizePage=" + this.sizePage
+            $.get("/vacancyBook/rpc/api/v1/getAllVacancies",
+                {
+                    filter: filterQuery,
+                    filterRegion: filterRegion,
+                    page: this.currentPage,
+                    sizePage: this.sizePage,
+                }
             ).done(function (vacancyListFormServer) {
                 self.rows = self.convertVacancyList(vacancyListFormServer.entries);
                 self.pages = vacancyListFormServer.pages;
@@ -118,9 +125,18 @@ new Vue({
                 this.currentPage++;
                 this.loadData();
             }
+        },
+        loadRegions: function () {
+            const self = this;
+
+            $.get("/vacancyBook/rpc/api/v1/getRegions"
+            ).done(function (response) {
+                self.areas = response;
+            });
         }
     },
     created: function () {
+        this.loadRegions();
         this.loadData();
     }
 });

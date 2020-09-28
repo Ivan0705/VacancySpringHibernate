@@ -18,7 +18,6 @@ public class Employer {
     public Employer() {
     }
 
-
     public Long getId() {
         return id;
     }

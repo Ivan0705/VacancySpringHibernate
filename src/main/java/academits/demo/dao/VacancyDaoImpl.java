@@ -17,8 +17,6 @@ import static java.lang.Long.parseLong;
 
 @Repository
 public class VacancyDaoImpl extends GenericDaoImpl<Vacancy, Integer> implements VacancyDao {
-
-
     public VacancyDaoImpl() {
         super(Vacancy.class);
     }
@@ -144,7 +142,7 @@ public class VacancyDaoImpl extends GenericDaoImpl<Vacancy, Integer> implements 
         CriteriaQuery<Vacancy> select = cq.select(root);
         cq.orderBy(cb.desc(salaryJoin.get("to")));
 
-        TypedQuery<Vacancy> q = entityManager.createQuery(select).setMaxResults(3);
+        TypedQuery<Vacancy> q = entityManager.createQuery(select).setMaxResults(20);
 
         return q.getResultList();
     }

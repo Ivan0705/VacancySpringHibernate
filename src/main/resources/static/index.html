@@ -22,9 +22,9 @@
 
         <label>
             <select class="form-control" v-model="filterRegion" @change="applyFilter" size="1">
-                <option :value="null">Выберите регион</option>
-                <option v-for="city in cityName" :value="city.id">
-                    г.{{city.name}}
+                <option :value="''">Выберите регион</option>
+                <option v-for="area in sortedCitiesName" :value="area.id">
+                    г.{{area.name}}
                 </option>
             </select>
         </label>

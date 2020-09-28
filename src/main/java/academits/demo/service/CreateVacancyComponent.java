@@ -25,7 +25,7 @@ public class CreateVacancyComponent {
     @Value("${specialization}")
     private Integer specialization;
 
-    @Value("4")
+    @Value("4")//area = 4 - это Новосибирск
     private Integer area;
 
     @Autowired
@@ -35,32 +35,36 @@ public class CreateVacancyComponent {
 
     @PostConstruct
     public void init() {
+        System.out.println("START IMPORT");
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
-            HttpGet request = new HttpGet(
-                    String.format("https://api.hh.ru/vacancies?specialization=%s&area=%s&per_page=85",
-                            specialization, area
-                            ));
+            for (int i = 0; i <= 2; i++) {
+                HttpGet request = new HttpGet(
+                        String.format("https://api.hh.ru/vacancies?specialization=%s&per_page=100&page=%s",
+                                specialization, i
+                        ));
+                try (CloseableHttpResponse response = httpClient.execute(request)) {
 
-            try (CloseableHttpResponse response = httpClient.execute(request)) {
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
+                        String vacancy1 = EntityUtils.toString(entity);
+                        ResultPage vacancy2 = objectMapper.readValue(vacancy1, ResultPage.class);
 
-                HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    String vacancy1 = EntityUtils.toString(entity);
-                    ResultPage vacancy2 = objectMapper.readValue(vacancy1, ResultPage.class);
-
-                    for (Vacancy vacancy: vacancy2.getItems()) {
-                        vacancyDao.update(vacancy);
+                        for (Vacancy vacancy : vacancy2.getItems()) {
+                            vacancyDao.update(vacancy);
+                        }
                     }
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("FINISH IMPORT");
     }
 }

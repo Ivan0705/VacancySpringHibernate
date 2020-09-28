@@ -21,6 +21,9 @@ public interface GenericDao<T, PK extends Serializable> {
     List<T> findAll(int page, int sizePage);
 
     @Transactional
+    List<T> findAll();
+
+    @Transactional
     long countAll();
 
 
