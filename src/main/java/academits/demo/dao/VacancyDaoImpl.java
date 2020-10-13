@@ -123,6 +123,7 @@ public class VacancyDaoImpl extends GenericDaoImpl<Vacancy, Integer> implements 
         return typedQuery.getSingleResult();
     }
 
+
     @Override
     public void update(Vacancy obj) {
         entityManager.merge(obj);
@@ -133,17 +134,21 @@ public class VacancyDaoImpl extends GenericDaoImpl<Vacancy, Integer> implements 
         entityManager.remove(obj);
     }
 
-    public List<Vacancy> getTopSalary() {
+    @Override
+    public List<Vacancy> getTopSalary(int page, int sizePage) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Vacancy> cq = cb.createQuery(clazz);
         Root<Vacancy> root = cq.from(clazz);
-        Join<Vacancy, Salary> salaryJoin = root.join("salary");
 
+        Join<Vacancy, Salary> salaryJoin = root.join("salary");
         CriteriaQuery<Vacancy> select = cq.select(root);
         cq.orderBy(cb.desc(salaryJoin.get("to")));
 
-        TypedQuery<Vacancy> q = entityManager.createQuery(select).setMaxResults(20);
+        TypedQuery<Vacancy> tq = entityManager.createQuery(select).setMaxResults(page);
+        int startPosition = (page) * sizePage;
+        tq.setFirstResult(startPosition);
+        tq.setMaxResults(sizePage);
 
-        return q.getResultList();
+        return tq.getResultList();
     }
 }

@@ -1,7 +1,5 @@
 package academits.demo.controller;
 
-
-import academits.demo.converter.VacancyToVacancyDtoConverter;
 import academits.demo.dto.PageResult;
 import academits.demo.dto.VacancyDto;
 import academits.demo.dto.api.AreaDto;
@@ -22,13 +20,13 @@ import java.util.List;
 public class VacancyBookController {
 
     private VacancyService vacancyService;
-    private VacancyToVacancyDtoConverter vacancyToVacancyDtoConverter;
-    @Autowired
-    private AreaService areaService;
 
-    public VacancyBookController(VacancyService vacancyService, VacancyToVacancyDtoConverter vacancyToVacancyDtoConverter) {
+    private final AreaService areaService;
+
+    @Autowired
+    public VacancyBookController(VacancyService vacancyService, AreaService areaService) {
         this.vacancyService = vacancyService;
-        this.vacancyToVacancyDtoConverter = vacancyToVacancyDtoConverter;
+        this.areaService = areaService;
     }
 
     @GetMapping("getRegions")
@@ -45,8 +43,9 @@ public class VacancyBookController {
 
     @RequestMapping(value = "getTopSalary", method = RequestMethod.GET)
     @ResponseBody
-    public List<VacancyDto> getTopSalary() {
-        return vacancyToVacancyDtoConverter.convert(vacancyService.getTopSalary());
+
+    public PageResult<VacancyDto> getTopSalary(int page, int sizePage, int countTopVacancy) throws ParseException {
+        return vacancyService.getTopSalary(page, sizePage, countTopVacancy);
     }
 }
 

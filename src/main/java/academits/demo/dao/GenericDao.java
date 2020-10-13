@@ -26,5 +26,4 @@ public interface GenericDao<T, PK extends Serializable> {
     @Transactional
     long countAll();
 
-
 }

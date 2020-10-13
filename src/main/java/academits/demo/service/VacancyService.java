@@ -2,10 +2,8 @@ package academits.demo.service;
 
 import academits.demo.converter.VacancyToVacancyDtoConverter;
 import academits.demo.dao.VacancyDao;
-import academits.demo.dao.VacancyDaoImpl;
 import academits.demo.dto.PageResult;
 import academits.demo.dto.VacancyDto;
-import academits.demo.model.Vacancy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -18,16 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class VacancyService {
     private final VacancyDao vacancyDao;
-    private final VacancyDaoImpl vacancyDaoImp;
-
     private final VacancyToVacancyDtoConverter vacancyToVacancyDtoConverter;
 
-
     @Autowired
-    public VacancyService(VacancyDao vacancyDao, VacancyDaoImpl vacancyDaoImp, VacancyToVacancyDtoConverter vacancyToVacancyDtoConverter) {
+    public VacancyService(VacancyDao vacancyDao, VacancyToVacancyDtoConverter vacancyToVacancyDtoConverter) {
         this.vacancyDao = vacancyDao;
-        this.vacancyDaoImp = vacancyDaoImp;
-
         this.vacancyToVacancyDtoConverter = vacancyToVacancyDtoConverter;
     }
 
@@ -49,7 +42,12 @@ public class VacancyService {
         }
     }
 
-    public List<Vacancy> getTopSalary() {
-        return vacancyDaoImp.getTopSalary();
+    public PageResult<VacancyDto> getTopSalary(int page, int sizePage, int countTopVacancy) throws ParseException {
+        int limit = Math.max(0, countTopVacancy - page * sizePage);
+        limit = Math.min(sizePage, limit);
+        List<VacancyDto> list = vacancyDao.getTopSalary(page, limit).stream().map(vacancyToVacancyDtoConverter::convert).collect(Collectors.toList());
+
+        return new PageResult<>(list, countTopVacancy, (int) Math.ceil((double) countTopVacancy / sizePage));
     }
+
 }

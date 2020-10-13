@@ -9,11 +9,11 @@ public class Salary {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "salaryTo")
-    private int to;
-
     @Column(name = "salaryFrom")
     private int from;
+
+    @Column(name = "salaryTo")
+    private int to;
 
     @Column
     private String currency;

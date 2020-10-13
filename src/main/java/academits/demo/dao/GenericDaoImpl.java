@@ -44,8 +44,10 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         CriteriaQuery<T> cq = cb.createQuery(clazz);
 
         CriteriaQuery<T> select = cq.select(cq.from(clazz));
+
         return entityManager.createQuery(select).getResultList();
     }
+
 
     @Override
     public long countAll() {
@@ -58,6 +60,7 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
         return q.getSingleResult();
     }
+
 
     @Override
     public void create(T obj) {

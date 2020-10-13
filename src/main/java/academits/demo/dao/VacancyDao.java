@@ -15,4 +15,7 @@ public interface VacancyDao extends GenericDao<Vacancy, Integer> {
     List<Vacancy> find(String query, String filterRegion, int page, int sizePage) throws ParseException;
 
     long findCount(String query, String filterRegion) throws ParseException;
+
+    List<Vacancy> getTopSalary(int page, int sizePage) throws ParseException;
+
 }

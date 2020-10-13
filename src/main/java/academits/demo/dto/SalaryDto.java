@@ -1,8 +1,8 @@
 package academits.demo.dto;
 
 public class SalaryDto {
-    private int to;
     private int from;
+    private int to;
     private String currency;
     private boolean gross;
 

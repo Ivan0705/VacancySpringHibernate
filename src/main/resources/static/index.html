@@ -10,15 +10,29 @@
     <title>Vacancy</title>
 </head>
 <body>
-
 <div id="app" class="content">
+    <go-top :size="50"
+            :right="50"
+            :bottom="50"
+            :z-index="100"
+            fg-color="#0275d8"
+            bg-color="white"
+            weight="bold"
+            border-color="#0275d8"
+            ripple-bg="rgba(2, 117, 216)"
+            :boundary="500"
+            :max-width="0"
+            :has-outline="false"
+            box-shadow="5px 5px 5px rgba(2, 117, 216)"
+            :tabindex="-1">
+    </go-top>
     <div class="filter-container">
         <label class="mr-1">
             <input type="text" class="form-control input-sm" v-model="filterQuery" placeholder="Найти:"/>
         </label>
         <button class="btn btn-primary" v-on:click="applyFilter">Отфильтровать</button>
         <button class="btn btn-primary" @click="resetFilter">Сбросить фильтр</button>
-        <button class="btn btn-primary" @click="getTopSalary">Топ - зарплата</button>
+        <button class="btn btn-primary" @click="getTopSalary">{{countTopVacancy}} топ - зарплата</button>
 
         <label>
             <select class="form-control" v-model="filterRegion" @change="applyFilter" size="1">
@@ -56,9 +70,9 @@
                 <td>{{row.employer.name}}</td>
                 <td>
                     <span v-if="row.salary">
-                        <span v-if="row.salary.from===0">До {{row.salary.to}} руб.</span>
-                        <span v-else-if="row.salary.to===0">От {{row.salary.from}} руб.</span>
-                        <span v-else>От {{row.salary.from }} руб. до {{row.salary.to}} руб. </span>
+                        <span v-if="row.salary.from===0">До {{row.salary.to}} {{translateCurrency(row.salary.currency)}}</span>
+                        <span v-else-if="row.salary.to===0">От {{row.salary.from}} {{translateCurrency(row.salary.currency)}}</span>
+                        <span v-else>От {{row.salary.from }} {{translateCurrency(row.salary.currency)}} до {{row.salary.to}} {{translateCurrency(row.salary.currency)}} </span>
                       </span>
                     <span v-else>Договорная</span>
                 </td>
@@ -79,6 +93,7 @@
 <script src="js/libs/jquery.js"></script>
 <script src="js/libs/bootstrap.bundle.js"></script>
 <script src="js/libs/vue.js"></script>
+<script src="js/libs/vue-go-top.min.js"></script>
 <script src="js/vacancyBook.js"></script>
 </body>
 </html>
